@@ -50,6 +50,10 @@
             </feature>
         </config-file>
 
+        <config-file target="AndroidManifest.xml" parent="application">
+            <activity android:label="@string/app_name" android:name="com.facebook.LoginActivity" />
+        </config-file>
+
         <source-file src="src/android/facebook/facebooksdk.jar" target-dir="libs" />
         <source-file src="src/android/facebook/android-support-v4.jar" target-dir="libs" />
 
