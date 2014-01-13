@@ -50,16 +50,17 @@
             </feature>
         </config-file>
 
-        <source-file src="src/android/facebooksdk.jar" target-dir="libs" />
+        <source-file src="src/android/facebook/facebooksdk.jar" target-dir="libs" />
+        <source-file src="src/android/facebook/android-support-v4.jar" target-dir="libs" />
 
         <!-- res files -->
-        <!--<source-file src="src/android/facebook/res/drawable/close.png" target-dir="res/drawable" />
+        <source-file src="src/android/facebook/res/drawable/close.png" target-dir="res/drawable" />
         <source-file src="src/android/facebook/res/drawable/facebook_icon.png" target-dir="res/drawable" />
         <source-file src="src/android/facebook/res/drawable-hdpi/close.png" target-dir="res/drawable-hdpi" />
         <source-file src="src/android/facebook/res/drawable-hdpi/facebook_icon.png" target-dir="res/drawable-hdpi" />
         <source-file src="src/android/facebook/res/drawable-ldpi/close.png" target-dir="res/drawable-ldpi" />
         <source-file src="src/android/facebook/res/drawable-ldpi/facebook_icon.png" target-dir="res/drawable-ldpi" />
-        <source-file src="src/android/facebook/res/drawable-xhdpi/close.png" target-dir="res/drawable-xhdpi" />-->
+        <source-file src="src/android/facebook/res/drawable-xhdpi/close.png" target-dir="res/drawable-xhdpi" />
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/ConnectPlugin.java" target-dir="src/org/apache/cordova/facebook" />
