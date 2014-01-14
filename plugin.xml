@@ -94,7 +94,7 @@
         <source-file src="src/ios/FacebookConnectPlugin.m" />
 
         <!-- release facebook 3.8 framework> -->
-        <source-file src="src/ios/FacebookSDK.framework" custom="true" />
+        <framework src="src/ios/FacebookSDK.framework" custom="true" />
         <framework src="CoreGraphics.framework" />
 
         <!-- system frameworks ARE THESE STILL REQUIRED? -->
