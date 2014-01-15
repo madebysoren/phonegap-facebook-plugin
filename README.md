@@ -13,7 +13,7 @@
 1. Installed the plugin using phonegap plugin tools
 
 ```
-cordova plugin add https://github.com/mamorkuchen-net/phonegap-facebook-plugin.git --variable APP_ID="[FB APP ID]" --variable APP_NAME="[FB APP NAME]"
+cordova plugin add https://github.com/marmorkuchen-net/phonegap-facebook-plugin.git --variable APP_ID="[FB APP ID]" --variable APP_NAME="[FB APP NAME]"
 ```
 
 2. Add the following to your config.xml
