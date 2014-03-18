@@ -28,7 +28,7 @@
         if (![url isKindOfClass:[NSURL class]]) {
         return;
         }
-    
+
         [FBSession.activeSession handleOpenURL:url];
 }
 
@@ -63,26 +63,26 @@
         case FBSessionStateOpenTokenExtended:
             if (!error) {
                 // We have a valid session
-                
+
                 if (state == FBSessionStateOpen) {
                     // Get the user's info
                     [FBRequestConnection startForMeWithCompletionHandler:
                      ^(FBRequestConnection *connection, id <FBGraphUser>user, NSError *error) {
                          if (!error) {
-                             self.userid = user.id;
+                             self.userid = user[@"id"];
                              // Send the plugin result. Wait for a successful fetch of user info.
                              CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                                            messageAsDictionary:[self responseObject]];
                              [self.commandDelegate sendPluginResult:pluginResult callbackId:self.loginCallbackId];
                          } else {
                              self.userid = @"";
-                             
+
                          }
                      }];
                 }else {
                     // Don't get user's info but trigger success callback
                     // Send the plugin result. Wait for a successful fetch of user info.
-                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK 
+                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                                 messageAsDictionary:[self responseObject]];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.loginCallbackId];
                 }
@@ -96,10 +96,10 @@
         default:
             break;
     }
-    
+
     if (error) {
         NSString *alertMessage = nil;
-        
+
         if (error.fberrorShouldNotifyUser) {
             // If the SDK has a message for the user, surface it.
             alertMessage = error.fberrorUserMessage;
@@ -141,7 +141,7 @@
             // For simplicity, this sample treats other errors blindly.
             alertMessage = @"Error. Please try again later.";
         }
-        
+
         if (alertMessage) {
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                               messageAsString:alertMessage];
@@ -174,9 +174,9 @@
 }
 
 - (void) init:(CDVInvokedUrlCommand*)command
-{    
+{
     self.userid = @"";
-    
+
     [FBSession openActiveSessionWithReadPermissions:nil
                                    allowLoginUI:NO
                               completionHandler:^(FBSession *session,
@@ -186,20 +186,20 @@
                                                       state:state
                                                       error:error];
                               }];
-    
+
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) getLoginStatus:(CDVInvokedUrlCommand*)command
-{    
+{
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                   messageAsDictionary:[self responseObject]];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) login:(CDVInvokedUrlCommand*)command
-{    
+{
     NSArray *permissions = nil;
     if ([command.arguments count] > 0) {
         // sanitize permissions array
@@ -208,10 +208,10 @@
             return ![evaluatedObject isEqual:@""];
         }]];
     }
-    
+
     // save the callbackId for the login callback
     self.loginCallbackId = command.callbackId;
-    
+
     // Check if the session is open or not
     if (FBSession.activeSession.isOpen) {
         // Reauthorize if the session is already open.
@@ -226,7 +226,7 @@
             } else {
                 readPermissionFound = YES;
             }
-            
+
             // If we've found one of each we can stop looking.
             if (publishPermissionFound && readPermissionFound) {
                 break;
@@ -290,11 +290,11 @@
                                      error:error];
              }];
         }
-        
-        
-        
+
+
+
     }
-    
+
     [super writeJavascript:nil];
 }
 
@@ -303,10 +303,10 @@
     if (!FBSession.activeSession.isOpen) {
         return;
     }
-    
+
     // Close the session and clear the cache
     [FBSession.activeSession closeAndClearTokenInformation];
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -315,7 +315,7 @@
 {
     // Save the callback ID
     self.dialogCallbackId = command.callbackId;
-    
+
     NSMutableDictionary *options = [[command.arguments lastObject] mutableCopy];
     NSString* method = [[NSString alloc] initWithString:[options objectForKey:@"method"]];
     if ([options objectForKey:@"method"]) {
@@ -348,7 +348,7 @@
 //            params[key] = [jsonWriter stringWithObject:obj];
         }
     }];
-    
+
     // Show the web dialog
     [FBWebDialogs
      presentDialogModallyWithSession:FBSession.activeSession
@@ -367,13 +367,13 @@
                  // Send the URL parameters back, for a requests dialog, the "request" parameter
                  // will include the resutling request id. For a feed dialog, the "post_id"
                  // parameter will include the resulting post id.
-                 NSDictionary *params = [self parseURLParams:[resultURL query]];                 
+                 NSDictionary *params = [self parseURLParams:[resultURL query]];
                  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
              }
          }
          [self.commandDelegate sendPluginResult:pluginResult callbackId:self.dialogCallbackId];
     }];
-    
+
     // For optional ARC support
     #if __has_feature(objc_arc)
     #else
@@ -381,7 +381,7 @@
         [params release];
         [options release];
     #endif
-    
+
     [super writeJavascript:nil];
 }
 
@@ -389,15 +389,15 @@
 {
     NSString* status = @"unknown";
     NSDictionary* sessionDict = nil;
-    
+
     NSTimeInterval expiresTimeInterval = [FBSession.activeSession.accessTokenData.expirationDate timeIntervalSinceNow];
     NSString* expiresIn = @"0";
     if (expiresTimeInterval > 0) {
         expiresIn = [NSString stringWithFormat:@"%0.0f", expiresTimeInterval];
     }
-    
+
     if (FBSession.activeSession.isOpen) {
-        
+
         status = @"connected";
         sessionDict = @{
                         @"accessToken" : FBSession.activeSession.accessTokenData.accessToken,
@@ -408,12 +408,12 @@
                         @"userID" : self.userid,
                         };
     }
-    
+
     NSMutableDictionary *statusDict = [NSMutableDictionary dictionaryWithObject:status forKey:@"status"];
     if (nil != sessionDict) {
         [statusDict setObject:sessionDict forKey:@"authResponse"];
     }
-        
+
     return statusDict;
 }
 
